@@ -1,32 +1,63 @@
-# Prerequisites
-*.d
+# OS junk
+.DS_Store
+Thumbs.db
 
-# Compiled Object files
+# Editor & IDE clutter
+*.swp
+*.swo
+*.tmp
+*.log
+*.bak
+*.orig
+.vscode/
+.idea/
+*.code-workspace
+
+# Node & tooling caches
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+.parcel-cache/
+.eslintcache
+coverage/
+lcov.info
+
+# Generic C/C++ artifacts
+*.d
 *.slo
 *.lo
 *.o
 *.obj
-
-# Precompiled Headers
 *.gch
 *.pch
-
-# Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
 *.a
+*.la
 *.lib
-
-# Executables
 *.exe
 *.out
 *.app
+
+# Arduino firmware build outputs (source stays tracked)
+firmware/build/
+firmware/bin/
+firmware/.pio/
+firmware/.pioenvs/
+firmware/.pio/libdeps/
+firmware/.vscode/
+firmware/*.elf
+firmware/*.hex
+firmware/*.bin
+
+# Web UI build outputs (keep sources in repo)
+ui-p5js/dist/
+ui-p5js/build/
+ui-p5js/.cache/
+ui-p5js/.parcel-cache/
+ui-p5js/.vscode/
+ui-p5js/node_modules/
