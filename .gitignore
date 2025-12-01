@@ -43,7 +43,7 @@ lcov.info
 *.out
 *.app
 
-# Arduino firmware build outputs (source stays tracked)
+# Arduino firmware build outputs (old firmware folder)
 firmware/build/
 firmware/bin/
 firmware/.pio/
@@ -61,3 +61,8 @@ ui-p5js/.cache/
 ui-p5js/.parcel-cache/
 ui-p5js/.vscode/
 ui-p5js/node_modules/
+
+# NEW: PlatformIO project (firmware-pio)
+firmware-pio/.pio/
+firmware-pio/test/
+firmware-pio/.vscode/
