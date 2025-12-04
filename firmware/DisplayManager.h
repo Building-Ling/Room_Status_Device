@@ -21,10 +21,6 @@ class DisplayManager {
   void render(const TimerSnapshot &timer);
   void transitionTo(const String &newStatus, const TimerSnapshot &timer);
 
-  // Reset the UI to the initial startup layout:
-  //   Line 1: "Room Status:"
-  //   Line 2: "AVAILABLE" + emoji
-  // No timer should be visible after this call.
   void reset();
 
   void setEmojiByName(const String &name);

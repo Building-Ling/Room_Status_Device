@@ -38,15 +38,12 @@ void WirelessHandler::handleCommand(const String &cmd) {
   } else if (upper.startsWith("EMOJI ")) {
     handleEmojiCommand(trimmed.substring(6));
   } else if (upper == "STOP") {
-    // STOP -> pause timer without clearing display.
     timer.pause();
     display.render(timer.getSnapshot());
   } else if (upper == "CLEAR") {
-    // CLEAR -> soft reset of timer only (no UI mode change).
     timer.clear();
     display.render(timer.getSnapshot());
   } else if (upper == "RESET_ALL") {
-    // Global reset back to startup state.
     timer.reset();
     display.reset();
   } else {
@@ -85,7 +82,6 @@ void WirelessHandler::handleTimerCommand(const String &cmdTail) {
 
     unsigned long totalSeconds = 0;
     if (rest.length() == 0) {
-      // Default 25 minutes if no duration specified.
       totalSeconds = 25UL * 60UL;
     } else if (!TimerLogic::parseFlexibleTime(rest, totalSeconds)) {
       Serial.println("Invalid timer format. Use SS, MM:SS, or HH:MM:SS.");
@@ -102,7 +98,6 @@ void WirelessHandler::handleTimerCommand(const String &cmdTail) {
 
     unsigned long totalSeconds = 0;
     if (rest.length() == 0) {
-      // Default 30 minutes if no duration specified.
       totalSeconds = 30UL * 60UL;
     } else if (!TimerLogic::parseFlexibleTime(rest, totalSeconds)) {
       Serial.println("Invalid timer format. Use SS, MM:SS, or HH:MM:SS.");

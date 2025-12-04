@@ -37,7 +37,6 @@ void TimerLogic::pause() {
   unsigned long now = millis();
   unsigned long elapsedSec = (now - timerStartMillis) / 1000;
 
-  // Sync the snapshot to the pause moment.
   if (snapshot.mode == TIMER_UP) {
     syncCountUp(elapsedSec);
   } else if (snapshot.mode == TIMER_DOWN) {
@@ -49,7 +48,6 @@ void TimerLogic::pause() {
 }
 
 void TimerLogic::clear() {
-  // Soft reset affecting only the timer values, not the global UI.
   paused = false;
 
   if (snapshot.mode == TIMER_DOWN) {
@@ -58,8 +56,6 @@ void TimerLogic::clear() {
   } else if (snapshot.mode == TIMER_UP) {
     snapshot.active = false;
     snapshot.currentSeconds = 0;
-  } else {
-    // TIMER_OFF – nothing to do.
   }
 }
 
@@ -98,7 +94,6 @@ bool TimerLogic::update(bool animationActive) {
   return previousSeconds != snapshot.currentSeconds;
 }
 
-// static
 bool TimerLogic::parseFlexibleTime(const String &input,
                                    unsigned long &outSeconds) {
   String s = input;
@@ -115,10 +110,8 @@ bool TimerLogic::parseFlexibleTime(const String &input,
   long sec = 0;
 
   if (firstColon == -1) {
-    // "SS"
     sec = s.toInt();
   } else if (firstColon == lastColon) {
-    // "MM:SS"
     String mm = s.substring(0, firstColon);
     String ss = s.substring(firstColon + 1);
     mm.trim();
@@ -127,7 +120,6 @@ bool TimerLogic::parseFlexibleTime(const String &input,
     m = mm.toInt();
     sec = ss.toInt();
   } else {
-    // "HH:MM:SS"
     String hh = s.substring(0, firstColon);
     String mm = s.substring(firstColon + 1, lastColon);
     String ss = s.substring(lastColon + 1);
@@ -144,11 +136,8 @@ bool TimerLogic::parseFlexibleTime(const String &input,
     return false;
   }
 
-  // Basic range sanity; still allow large values but clamp hours to a
-  // reasonable range on display side if needed.
   unsigned long total =
       (unsigned long)h * 3600UL + (unsigned long)m * 60UL + (unsigned long)sec;
-
   outSeconds = total;
   return true;
 }
@@ -167,4 +156,5 @@ void TimerLogic::syncCountdown(unsigned long elapsedSec) {
 
   snapshot.currentSeconds = snapshot.durationSeconds - elapsedSec;
 }
+
 

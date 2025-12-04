@@ -9,23 +9,11 @@ class TimerLogic {
  public:
   TimerLogic();
 
-  // Start a count-up timer from 00:00:00 (or resume semantics handled by caller)
-  // totalSeconds is used as an upper bound for the timer, but the timer can
-  // still function even if totalSeconds is 0 (open-ended).
   void startTimerUp(unsigned long totalSeconds);
-
-  // Start a countdown timer from the given totalSeconds.
   void startTimerDown(unsigned long totalSeconds);
 
-  // Pause the currently running timer without clearing its state.
   void pause();
-
-  // Soft reset of the timer state but NOT global UI / mode:
-  // - For countdown: stop, reset displayed time back to original duration.
-  // - For count up: stop, reset displayed time to 00:00:00.
   void clear();
-
-  // Full reset back to construction-time state.
   void reset();
 
   // Legacy API retained for backwards compatibility; now behaves like pause().
@@ -39,13 +27,9 @@ class TimerLogic {
   TimerSnapshot snapshot;
   unsigned long timerStartMillis;
   unsigned long lastTimerUpdateMillis;
+
   bool paused;
 
-  // Parses flexible time formats:
-  //   "SS"
-  //   "MM:SS"
-  //   "HH:MM:SS"
-  // Returns true on success and writes total seconds to outSeconds.
   static bool parseFlexibleTime(const String &input, unsigned long &outSeconds);
 
   void syncCountdown(unsigned long elapsedSec);

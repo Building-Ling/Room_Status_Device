@@ -21,7 +21,6 @@ void DisplayManager::begin() {
 }
 
 void DisplayManager::reset() {
-  // Reset UI to startup layout: "Room Status:" / "AVAILABLE" + emoji.
   currentStatusText = "AVAILABLE";
   lastLine2Text = "AVAILABLE";
   animating = false;
@@ -69,7 +68,6 @@ String DisplayManager::formatTimer(unsigned long totalSeconds) const {
   unsigned long minutes = remaining / 60UL;
   unsigned long seconds = remaining % 60UL;
 
-  // Clamp to a reasonable display range (999:59:59 max).
   if (hours > 999UL) {
     hours = 999UL;
     minutes = 59UL;
