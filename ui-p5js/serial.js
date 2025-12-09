@@ -53,13 +53,19 @@ async function readLoop() {
             // Append Arduino text to log
             logLine(trimmed);
             
-            // Check for status events
-            if (trimmed === "EVENT STATUS AVAILABLE") {
-              if (typeof window.onStatusEvent === 'function') {
+            // Check for status events and map firmware output to UI status
+            if (typeof window.onStatusEvent === 'function') {
+              if (trimmed === "EVENT STATUS AVAILABLE") {
                 window.onStatusEvent("AVAILABLE");
-              }
-            } else if (trimmed === "EVENT STATUS BUSY") {
-              if (typeof window.onStatusEvent === 'function') {
+              } else if (trimmed === "EVENT STATUS BUSY") {
+                window.onStatusEvent("BUSY");
+              } else if (trimmed === "AVAILABLE") {
+                window.onStatusEvent("AVAILABLE");
+              } else if (trimmed === "BUSY") {
+                window.onStatusEvent("BUSY");
+              } else if (trimmed === "Received: AVAILABLE") {
+                window.onStatusEvent("AVAILABLE");
+              } else if (trimmed === "Received: BUSY") {
                 window.onStatusEvent("BUSY");
               }
             }

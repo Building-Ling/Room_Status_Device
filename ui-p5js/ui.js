@@ -38,6 +38,11 @@ window.onStatusEvent = function(status) {
   updateStatusChips(status);
 };
 
+// Dev helper – lets us test highlighting from the console
+window.__debugSetStatus = function(status) {
+  updateStatusChips(status);
+};
+
 // Fullscreen toggle helper
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
