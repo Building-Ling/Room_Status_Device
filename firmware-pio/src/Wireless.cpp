@@ -47,9 +47,11 @@ void WirelessHandler::handleStatusCommand(const String &upper,
   if (upper == "AVAILABLE") {
     display.setEmojiByName("SMILE");
     display.transitionTo("AVAILABLE");
+    Serial.println("EVENT STATUS AVAILABLE");
   } else if (upper == "BUSY") {
     display.setEmojiByName("BUSY");
     display.transitionTo("BUSY");
+    Serial.println("EVENT STATUS BUSY");
   } else if (upper.startsWith("MEETING")) {
     display.setEmojiByName("NEUTRAL");
     display.transitionTo("MEETING");

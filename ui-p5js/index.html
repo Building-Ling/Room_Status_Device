@@ -45,6 +45,42 @@
       font-size: 13px;
       margin: 2px 4px 2px 0;
     }
+    .status-chip {
+      display: inline-block;
+      padding: 6px 12px;
+      margin: 4px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 2px solid #ccc;
+      background: #f0f0f0;
+      color: #666;
+      cursor: default;
+      user-select: none;
+    }
+    .status-chip.active {
+      border-width: 2px;
+    }
+    .status-chip.available {
+      border-color: #4caf50;
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    .status-chip.available.active {
+      background: #4caf50;
+      color: white;
+      border-color: #4caf50;
+    }
+    .status-chip.busy {
+      border-color: #f44336;
+      background: #ffebee;
+      color: #c62828;
+    }
+    .status-chip.busy.active {
+      background: #f44336;
+      color: white;
+      border-color: #f44336;
+    }
   </style>
 </head>
 <body>
@@ -58,9 +94,8 @@
 
     <div class="row">
       <strong>Status:</strong><br />
-      <button id="btn-available">AVAILABLE</button>
-      <button id="btn-busy">BUSY</button>
-      <button id="btn-meeting">MEETING</button>
+      <span id="chip-available" class="status-chip available">AVAILABLE</span>
+      <span id="chip-busy" class="status-chip busy">BUSY</span>
     </div>
 
     <div class="row">

@@ -37,12 +37,34 @@ async function connectSerial() {
 
 async function readLoop() {
   try {
+    let buffer = "";
     while (serialConnected && reader) {
       const { value, done } = await reader.read();
       if (done) break;
       if (value) {
-        // Append Arduino text to log
-        logLine(value);
+        buffer += value;
+        // Process complete lines
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || ""; // Keep incomplete line in buffer
+        
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (trimmed) {
+            // Append Arduino text to log
+            logLine(trimmed);
+            
+            // Check for status events
+            if (trimmed === "EVENT STATUS AVAILABLE") {
+              if (typeof window.onStatusEvent === 'function') {
+                window.onStatusEvent("AVAILABLE");
+              }
+            } else if (trimmed === "EVENT STATUS BUSY") {
+              if (typeof window.onStatusEvent === 'function') {
+                window.onStatusEvent("BUSY");
+              }
+            }
+          }
+        }
       }
     }
   } catch (err) {

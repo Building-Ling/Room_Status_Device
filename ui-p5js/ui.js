@@ -1,10 +1,6 @@
 // ui.js
 
 // Helper functions for sending commands
-function sendStatus(status) {
-  sendCommand(status);
-}
-
 function sendCustomStatus(text) {
   if (!text || !text.trim().length) return;
   sendCommand("STATUS " + text.trim());
@@ -18,14 +14,35 @@ function sendResetAll() {
   sendCommand("RESET_ALL");
 }
 
+// Update status chip highlights
+function updateStatusChips(status) {
+  const chipAvailable = document.getElementById("chip-available");
+  const chipBusy = document.getElementById("chip-busy");
+  
+  if (chipAvailable && chipBusy) {
+    // Remove active class from both
+    chipAvailable.classList.remove("active");
+    chipBusy.classList.remove("active");
+    
+    // Add active class to the current status
+    if (status === "AVAILABLE") {
+      chipAvailable.classList.add("active");
+    } else if (status === "BUSY") {
+      chipBusy.classList.add("active");
+    }
+  }
+}
+
+// Global callback for status events from serial.js
+window.onStatusEvent = function(status) {
+  updateStatusChips(status);
+};
+
 function setup() {
   // We don't need a canvas; p5's setup just ensures DOM is ready.
   noCanvas();
 
   const btnConnect = document.getElementById("btnConnect");
-  const btnAvailable = document.getElementById("btn-available");
-  const btnBusy = document.getElementById("btn-busy");
-  const btnMeeting = document.getElementById("btn-meeting");
   const statusInput = document.getElementById("statusInput");
   const btnSendStatus = document.getElementById("btn-send-status");
   const btnEmojiSmile = document.getElementById("btn-emoji-smile");
@@ -39,20 +56,6 @@ function setup() {
   // Connect button
   btnConnect.addEventListener("click", () => {
     connectSerial();
-  });
-
-  // ---------------- STATUS ----------------
-
-  btnAvailable.addEventListener("click", () => {
-    sendStatus("AVAILABLE");
-  });
-
-  btnBusy.addEventListener("click", () => {
-    sendStatus("BUSY");
-  });
-
-  btnMeeting.addEventListener("click", () => {
-    sendStatus("MEETING");
   });
 
   // Custom STATUS <text>
