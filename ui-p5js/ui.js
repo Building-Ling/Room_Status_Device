@@ -38,6 +38,36 @@ window.onStatusEvent = function(status) {
   updateStatusChips(status);
 };
 
+// Fullscreen toggle helper
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    // Enter fullscreen for the entire page
+    document.documentElement.requestFullscreen().catch(err => {
+      console.error("Error attempting fullscreen:", err);
+    });
+  } else {
+    // Exit fullscreen
+    document.exitFullscreen().catch(err => {
+      console.error("Error exiting fullscreen:", err);
+    });
+  }
+}
+
+// Global keydown listener for fullscreen toggle
+window.addEventListener("keydown", (event) => {
+  // Ignore keypresses when focused in an input/textarea so typing 'f' in the text field doesn't toggle
+  const target = event.target;
+  const tag = (target && target.tagName) ? target.tagName.toLowerCase() : "";
+  if (tag === "input" || tag === "textarea") {
+    return;
+  }
+
+  if (event.key === "f" || event.key === "F") {
+    event.preventDefault();
+    toggleFullscreen();
+  }
+});
+
 function setup() {
   // We don't need a canvas; p5's setup just ensures DOM is ready.
   noCanvas();
