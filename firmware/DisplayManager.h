@@ -5,7 +5,6 @@
 #include <LiquidCrystal.h>
 
 #include "Emoji.h"
-#include "TimerTypes.h"
 
 class DisplayManager {
  public:
@@ -18,8 +17,8 @@ class DisplayManager {
 
   void begin();
 
-  void render(const TimerSnapshot &timer);
-  void transitionTo(const String &newStatus, const TimerSnapshot &timer);
+  void render();
+  void transitionTo(const String &newStatus);
 
   void reset();
 
@@ -44,13 +43,12 @@ class DisplayManager {
   unsigned int pacmanSpeedMs;
   unsigned int typeInSpeedMs;
 
-  String buildLine2Content(const TimerSnapshot &timer) const;
+  String buildLine2Content() const;
   int effectiveTextLen(const String &s) const;
-  String formatTimer(unsigned long totalSeconds) const;
 
   void animatePacmanLine2(const String &oldText);
-  void typeInLine2(const TimerSnapshot &timer);
-  void drawStaticStatus(const TimerSnapshot &timer);
+  void typeInLine2();
+  void drawStaticStatus();
 };
 
 #endif

@@ -50,6 +50,7 @@
 <body>
   <div class="panel">
     <h2>Room Status Controller</h2>
+    
     <div class="row">
       <button id="btnConnect">Connect Serial</button>
       <span id="statusText">Not connected</span>
@@ -57,45 +58,30 @@
 
     <div class="row">
       <strong>Status:</strong><br />
-      <button id="btnAvailable">AVAILABLE</button>
-      <button id="btnBusy">BUSY</button>
-      <button id="btnMeeting">MEETING</button>
+      <button id="btn-available">AVAILABLE</button>
+      <button id="btn-busy">BUSY</button>
+      <button id="btn-meeting">MEETING</button>
     </div>
 
     <div class="row">
       <strong>Custom status:</strong><br />
       <input id="statusInput" type="text" placeholder="Custom status text" style="width:60%;" />
-      <button id="btnSendStatus">Send STATUS</button>
-    </div>
-
-    <div class="row">
-      <strong>Timer:</strong><br />
-      <label for="timerMode">Mode:</label>
-      <select id="timerMode">
-        <option value="UP">UP (count up)</option>
-        <option value="DOWN">DOWN (count down)</option>
-      </select>
-      <label for="timerMinutes">Minutes:</label>
-      <input id="timerMinutes" type="number" min="1" max="999" value="25" style="width:60px;" />
-      <button id="btnStartTimer">Start TIMER</button>
-      <button id="btnStopTimer">Stop TIMER</button>
+      <button id="btn-send-status">Send STATUS</button>
     </div>
 
     <div class="row">
       <strong>Emoji:</strong><br />
-      <select id="emojiSelect">
-        <option value="SMILE">SMILE</option>
-        <option value="NEUTRAL">NEUTRAL</option>
-        <option value="BUSY">BUSY</option>
-        <option value="SLEEP">SLEEP</option>
-        <option value="CHECK">CHECK</option>
-        <option value="WARN">WARN</option>
-      </select>
-      <button id="btnEmoji">Set EMOJI</button>
+      <button id="btn-emoji-smile">SMILE</button>
+      <button id="btn-emoji-neutral">NEUTRAL</button>
+      <button id="btn-emoji-busy">BUSY</button>
+      <button id="btn-emoji-sleep">SLEEP</button>
+      <button id="btn-emoji-check">CHECK</button>
+      <button id="btn-emoji-warn">WARN</button>
     </div>
 
     <div class="row">
-      <button id="btnClear">CLEAR</button>
+      <strong>System:</strong><br />
+      <button id="btn-reset-all">RESET_ALL</button>
     </div>
   </div>
 

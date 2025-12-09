@@ -1,8 +1,7 @@
 #include "Wireless.h"
 
-WirelessHandler::WirelessHandler(DisplayManager &displayManager,
-                                 TimerLogic &timerLogic)
-    : display(displayManager), timer(timerLogic), lineBuffer("") {}
+WirelessHandler::WirelessHandler(DisplayManager &displayManager)
+    : display(displayManager), lineBuffer("") {}
 
 void WirelessHandler::begin() {
   Serial.begin(9600);
@@ -33,21 +32,10 @@ void WirelessHandler::handleCommand(const String &cmd) {
   String upper = trimmed;
   upper.toUpperCase();
 
-  if (upper.startsWith("TIMER ")) {
-    handleTimerCommand(upper.substring(6));
-  } else if (upper.startsWith("EMOJI ")) {
+  if (upper.startsWith("EMOJI ")) {
     handleEmojiCommand(trimmed.substring(6));
-  } else if (upper == "STOP") {
-    // STOP -> pause timer without clearing display.
-    timer.pause();
-    display.render(timer.getSnapshot());
-  } else if (upper == "CLEAR") {
-    // CLEAR -> soft reset of timer only (no UI mode change).
-    timer.clear();
-    display.render(timer.getSnapshot());
   } else if (upper == "RESET_ALL") {
-    // Global reset back to startup state.
-    timer.reset();
+    // Reset to startup state: AVAILABLE status with default emoji.
     display.reset();
   } else {
     handleStatusCommand(upper, trimmed);
@@ -56,69 +44,20 @@ void WirelessHandler::handleCommand(const String &cmd) {
 
 void WirelessHandler::handleStatusCommand(const String &upper,
                                           const String &original) {
-  const TimerSnapshot snapshot = timer.getSnapshot();
-
   if (upper == "AVAILABLE") {
     display.setEmojiByName("SMILE");
-    display.transitionTo("AVAILABLE", snapshot);
+    display.transitionTo("AVAILABLE");
   } else if (upper == "BUSY") {
     display.setEmojiByName("BUSY");
-    display.transitionTo("BUSY", snapshot);
+    display.transitionTo("BUSY");
   } else if (upper.startsWith("MEETING")) {
     display.setEmojiByName("NEUTRAL");
-    display.transitionTo("MEETING", snapshot);
+    display.transitionTo("MEETING");
   } else if (upper.startsWith("STATUS ")) {
     String t = original.substring(7);
-    display.transitionTo(t, snapshot);
+    display.transitionTo(t);
   } else {
     Serial.println("Unknown command.");
-  }
-}
-
-void WirelessHandler::handleTimerCommand(const String &cmdTail) {
-  String tail = cmdTail;
-  tail.trim();
-
-  if (tail.startsWith("UP")) {
-    String rest = tail.substring(2);
-    rest.trim();
-
-    unsigned long totalSeconds = 0;
-    if (rest.length() == 0) {
-      // Default 25 minutes if no duration specified.
-      totalSeconds = 25UL * 60UL;
-    } else if (!TimerLogic::parseFlexibleTime(rest, totalSeconds)) {
-      Serial.println("Invalid timer format. Use SS, MM:SS, or HH:MM:SS.");
-      return;
-    }
-
-    timer.startTimerUp(totalSeconds);
-    Serial.print("Timer UP started (s): ");
-    Serial.println(totalSeconds);
-    display.render(timer.getSnapshot());
-  } else if (tail.startsWith("DOWN")) {
-    String rest = tail.substring(4);
-    rest.trim();
-
-    unsigned long totalSeconds = 0;
-    if (rest.length() == 0) {
-      // Default 30 minutes if no duration specified.
-      totalSeconds = 30UL * 60UL;
-    } else if (!TimerLogic::parseFlexibleTime(rest, totalSeconds)) {
-      Serial.println("Invalid timer format. Use SS, MM:SS, or HH:MM:SS.");
-      return;
-    }
-
-    timer.startTimerDown(totalSeconds);
-    Serial.print("Timer DOWN started (s): ");
-    Serial.println(totalSeconds);
-    display.render(timer.getSnapshot());
-  } else if (tail == "STOP" || tail == "OFF") {
-    timer.pause();
-    Serial.println("Timer paused.");
-    display.render(timer.getSnapshot());
-  } else {
-    Serial.println("Unknown TIMER command.");
   }
 }
 
@@ -127,20 +66,19 @@ void WirelessHandler::handleEmojiCommand(const String &name) {
 }
 
 void WirelessHandler::printHelp() const {
-  Serial.println("Booted: Pac-Man + decoupled timers.");
+  Serial.println("Room Status Device (no timer version)");
+  Serial.println();
   Serial.println("Status commands:");
-  Serial.println("  AVAILABLE");
-  Serial.println("  BUSY");
-  Serial.println("  MEETING");
-  Serial.println("  STATUS <text>");
-  Serial.println("Timer commands:");
-  Serial.println("  TIMER UP <minutes>");
-  Serial.println("  TIMER DOWN <minutes>");
-  Serial.println("  TIMER STOP or TIMER OFF");
-  Serial.println("Emoji:");
+  Serial.println("  AVAILABLE               Set status to AVAILABLE");
+  Serial.println("  BUSY                    Set status to BUSY");
+  Serial.println("  MEETING                 Set status to MEETING");
+  Serial.println("  STATUS <text>           Set custom status line");
+  Serial.println();
+  Serial.println("Emoji commands:");
   Serial.println("  EMOJI SMILE/NEUTRAL/BUSY/SLEEP/CHECK/WARN");
-  Serial.println("Other:");
-  Serial.println("  CLEAR");
+  Serial.println();
+  Serial.println("System commands:");
+  Serial.println("  RESET_ALL               Reset to AVAILABLE with default emoji.");
 }
 
 

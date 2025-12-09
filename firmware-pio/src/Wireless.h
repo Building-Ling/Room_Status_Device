@@ -4,23 +4,20 @@
 #include <Arduino.h>
 
 #include "DisplayManager.h"
-#include "TimerLogic.h"
 
 class WirelessHandler {
  public:
-  WirelessHandler(DisplayManager &displayManager, TimerLogic &timerLogic);
+  WirelessHandler(DisplayManager &displayManager);
 
   void begin();
   void handleWireless();
 
  private:
   DisplayManager &display;
-  TimerLogic &timer;
   String lineBuffer;
 
   void handleCommand(const String &cmd);
   void handleStatusCommand(const String &upper, const String &original);
-  void handleTimerCommand(const String &cmdTail);
   void handleEmojiCommand(const String &name);
   void printHelp() const;
 };

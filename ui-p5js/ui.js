@@ -1,52 +1,63 @@
 // ui.js
 
+// Helper functions for sending commands
+function sendStatus(status) {
+  sendCommand(status);
+}
+
+function sendCustomStatus(text) {
+  if (!text || !text.trim().length) return;
+  sendCommand("STATUS " + text.trim());
+}
+
+function sendEmoji(name) {
+  sendCommand("EMOJI " + name);
+}
+
+function sendResetAll() {
+  sendCommand("RESET_ALL");
+}
+
 function setup() {
   // We don't need a canvas; p5's setup just ensures DOM is ready.
   noCanvas();
 
-  const btnConnect     = document.getElementById("btnConnect");
-  const btnAvailable   = document.getElementById("btnAvailable");
-  const btnBusy        = document.getElementById("btnBusy");
-  const btnMeeting     = document.getElementById("btnMeeting");
-
-  const statusInput    = document.getElementById("statusInput");
-  const btnSendStatus  = document.getElementById("btnSendStatus");
-
-  const timerModeSel   = document.getElementById("timerMode");
-  const timerMinutes   = document.getElementById("timerMinutes");
-  const btnStartTimer  = document.getElementById("btnStartTimer");
-  const btnStopTimer   = document.getElementById("btnStopTimer");
-
-  const emojiSelect    = document.getElementById("emojiSelect");
-  const btnEmoji       = document.getElementById("btnEmoji");
-
-  const btnClear       = document.getElementById("btnClear");
+  const btnConnect = document.getElementById("btnConnect");
+  const btnAvailable = document.getElementById("btn-available");
+  const btnBusy = document.getElementById("btn-busy");
+  const btnMeeting = document.getElementById("btn-meeting");
+  const statusInput = document.getElementById("statusInput");
+  const btnSendStatus = document.getElementById("btn-send-status");
+  const btnEmojiSmile = document.getElementById("btn-emoji-smile");
+  const btnEmojiNeutral = document.getElementById("btn-emoji-neutral");
+  const btnEmojiBusy = document.getElementById("btn-emoji-busy");
+  const btnEmojiSleep = document.getElementById("btn-emoji-sleep");
+  const btnEmojiCheck = document.getElementById("btn-emoji-check");
+  const btnEmojiWarn = document.getElementById("btn-emoji-warn");
+  const btnResetAll = document.getElementById("btn-reset-all");
 
   // Connect button
   btnConnect.addEventListener("click", () => {
     connectSerial();
   });
 
-  // ---------------- STATUS (no timers attached) ----------------
+  // ---------------- STATUS ----------------
 
   btnAvailable.addEventListener("click", () => {
-    // purely status; timer is separate
-    sendCommand("AVAILABLE");
+    sendStatus("AVAILABLE");
   });
 
   btnBusy.addEventListener("click", () => {
-    sendCommand("BUSY");
+    sendStatus("BUSY");
   });
 
   btnMeeting.addEventListener("click", () => {
-    sendCommand("MEETING");
+    sendStatus("MEETING");
   });
 
   // Custom STATUS <text>
   btnSendStatus.addEventListener("click", () => {
-    const txt = statusInput.value.trim();
-    if (!txt.length) return;
-    sendCommand("STATUS " + txt);
+    sendCustomStatus(statusInput.value);
   });
 
   statusInput.addEventListener("keydown", (e) => {
@@ -55,41 +66,36 @@ function setup() {
     }
   });
 
-  // ---------------- TIMER (fully decoupled) ----------------
-
-  btnStartTimer.addEventListener("click", () => {
-    const mode = timerModeSel.value; // "UP" or "DOWN"
-    let mins = parseInt(timerMinutes.value, 10);
-    if (isNaN(mins) || mins <= 0) {
-      mins = (mode === "UP") ? 25 : 30; // sane defaults
-      timerMinutes.value = mins;
-    }
-
-    if (mode === "UP") {
-      // TIMER UP <minutes>
-      sendCommand("TIMER UP " + mins);
-    } else {
-      // TIMER DOWN <minutes>
-      sendCommand("TIMER DOWN " + mins);
-    }
-  });
-
-  btnStopTimer.addEventListener("click", () => {
-    // TIMER STOP stops any active timer
-    sendCommand("TIMER STOP");
-  });
-
   // ---------------- EMOJI ----------------
 
-  btnEmoji.addEventListener("click", () => {
-    const value = emojiSelect.value;
-    sendCommand("EMOJI " + value);
+  btnEmojiSmile.addEventListener("click", () => {
+    sendEmoji("SMILE");
   });
 
-  // ---------------- CLEAR ----------------
+  btnEmojiNeutral.addEventListener("click", () => {
+    sendEmoji("NEUTRAL");
+  });
 
-  btnClear.addEventListener("click", () => {
-    sendCommand("CLEAR");
+  btnEmojiBusy.addEventListener("click", () => {
+    sendEmoji("BUSY");
+  });
+
+  btnEmojiSleep.addEventListener("click", () => {
+    sendEmoji("SLEEP");
+  });
+
+  btnEmojiCheck.addEventListener("click", () => {
+    sendEmoji("CHECK");
+  });
+
+  btnEmojiWarn.addEventListener("click", () => {
+    sendEmoji("WARN");
+  });
+
+  // ---------------- RESET_ALL ----------------
+
+  btnResetAll.addEventListener("click", () => {
+    sendResetAll();
   });
 }
 
